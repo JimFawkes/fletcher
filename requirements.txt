@@ -1,0 +1,15 @@
+spacy
+gensim
+tensorflow
+keras
+sklearn
+numpy
+pandas
+matplotlib
+pyLDAvis
+loguru
+nltk
+seaborn
+tqdm
+
+
