@@ -7,6 +7,7 @@ import argparse
 import sys
 from loguru import logger
 
+from fletcher import train
 from config import Config
 
 _log_file_name = __file__.split("/")[-1].split(".")[0]
@@ -37,38 +38,41 @@ parser = argparse.ArgumentParser(
     epilog=epilog,
 )
 
-# parser.add_argument(
-#     "--setup_db", "-s", help="Setup the database. Create necessary Tables."
-# )
-# 
+parser.add_argument("--train_pv", help="Train Paragraph Vectors.")
+#
 # parser.add_argument(
 #     "--create_tables",
 #     action="store_true",
 #     help="Create the necessary tables in the database.",
 # )
-# 
+#
 # parser.add_argument(
 #     "--drop_tables", action="store_true", help="Drop all tables in the database."
 # )
-# 
+#
 # parser.add_argument(
 #     "--import_weather", help="Import weather data for a given year.", type=str
 # )
-# 
+#
 # parser.add_argument("--run_pipeline", action="store_true", help="Run pipeline.")
-# 
+#
 # parser.add_argument("--upload_logs", action="store_true", help="Upload logs to S3.")
+
+
+def train_paragraph_vectors():
+    return train.train()
 
 
 def main():
     args = parser.parse_args()
-    logger.debug(f"Starting Pipline")
+    # logger.debug(f"Starting Pipline")
 
     # Add Commands
 
- #    if args.upload_logs:
- #        logger.warning(f"Upload logs part is not yet implemented.")
- #        sys.exit(1)
+    if args.train_pv:
+        logger.info(f"Train Paragraph Vectors")
+        model = train_paragraph_vectors()
+        sys.exit(0)
 
 
 if __name__ == "__main__":

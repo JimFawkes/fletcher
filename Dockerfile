@@ -1,7 +1,7 @@
 FROM python:3.6
 WORKDIR /usr/src/app
 
-RUN mkdir fletcher logs data
+RUN mkdir fletcher logs data models
 COPY requirements.txt .
 COPY download_models.sh .
 RUN python3 -m pip install -r requirements.txt
