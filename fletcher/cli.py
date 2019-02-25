@@ -7,7 +7,7 @@ import argparse
 import sys
 from loguru import logger
 
-from fletcher import train
+import train
 from config import Config
 
 _log_file_name = __file__.split("/")[-1].split(".")[0]

@@ -11,5 +11,6 @@ loguru
 nltk
 seaborn
 tqdm
+python-dotenv
 
 
