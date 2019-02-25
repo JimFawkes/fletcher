@@ -8,6 +8,8 @@ RUN python3 -m pip install -r requirements.txt
 
 COPY fletcher/ fletcher/
 
+RUN chmod +x download_models.sh
+
 RUN ./download_models.sh
 
 CMD ["python", "fletcher", "--help"]
