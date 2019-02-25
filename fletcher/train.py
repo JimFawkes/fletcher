@@ -12,7 +12,7 @@ logger.add(f"logs/{_log_file_name}.log", rotation="1 day")
 
 def get_docs(filename="data/articles_df.pkl"):
     logger.info(f"get_docs(filename={filename})")
-    nlp = spacy.load("en_core_web_md")
+    nlp = spacy.load("en")
     # logger.debug(f"loaded english model.")
     with open(filename, "rb") as fp:
         df = pickle.load(fp)
