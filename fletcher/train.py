@@ -62,11 +62,18 @@ def get_paragraph(filename="data/articles_df.pkl", paragraph_length=5):
 
 @logger.catch
 def train(model_path="models/", handler=get_paragraph, **kwargs):
+    model_filename = model_path + handler.__name__ + "model.pkl"
+    docs_filename = model_path + handler.__name__ + "docs.pkl"
     logger.info(
         f"train(model_path={model_path}, handler={handler.__name__}, kwargs={kwargs})"
     )
     documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(handler(**kwargs))]
     logger.info(f"Got all docs. A total of {len(documents)}")
+
+    logger.info(f"Pickled docs to: {docs_filename}")
+    with open(docs_filename, "wb") as fp:
+        pickle.dump(documents, fp)
+
     model = Doc2Vec(
         documents,
         vector_size=5,
@@ -78,9 +85,8 @@ def train(model_path="models/", handler=get_paragraph, **kwargs):
         negative=20,
     )
 
-    filename = model_path + handler.__name__ + "model.pkl"
-    logger.info(f"Pickled model to: {filename}")
-    with open(filename, "wb") as fp:
+    logger.info(f"Pickled model to: {model_filename}")
+    with open(model_filename, "wb") as fp:
         pickle.dump(model, fp)
 
     return model
