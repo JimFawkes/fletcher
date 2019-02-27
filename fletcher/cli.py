@@ -38,7 +38,7 @@ parser = argparse.ArgumentParser(
     epilog=epilog,
 )
 
-parser.add_argument("--train_pv", help="Train Paragraph Vectors.")
+parser.add_argument("--train_pv", action="store_true", help="Train Paragraph Vectors.")
 #
 # parser.add_argument(
 #     "--create_tables",
