@@ -8,7 +8,8 @@ from loguru import logger
 
 _log_file_name = __file__.split("/")[-1].split(".")[0]
 logger.add(f"logs/{_log_file_name}.log", rotation="1 day")
-
+logger.add(f"logs/info_{_log_file_name}.log", rotation="1 day", level="INFO")
+logger.add(f"logs/error_{_log_file_name}.log", rotation="1 day", level="ERROR")
 
 exclude_sentences = [
     "For us to continue writing great stories, we need to display ads.",
@@ -33,6 +34,7 @@ exclude_sentences = [
 ]
 
 
+@logger.catch
 def clean_sent(doc, tag="", relevant_entities=["ORG", "PERSON"]):
     """Return a generator iterating over sentences.
     doc: spacy_doc
@@ -44,6 +46,7 @@ def clean_sent(doc, tag="", relevant_entities=["ORG", "PERSON"]):
         tag = default_tag.lower()
     clean_doc = []
     for sentence_idx, sent in enumerate(doc.sents):
+        # logger.debug(f"Processing sentence: {sent}")
         ents = []
         current_ent = False
         clean_words = []
@@ -63,8 +66,10 @@ def clean_sent(doc, tag="", relevant_entities=["ORG", "PERSON"]):
                     clean_words.append(word_ent)
 
                 else:
-                    logger.error(f"UNKNOWN STATE: {word}")
-                    raise NotImplementedError
+                    logger.error(
+                        f"UNKNOWN STATE: WORD: {word}, SENT: {sent}, SENT_ID: {sentence_idx}, TAG: {tag}"
+                    )
+                    continue
 
                 if (word.is_alpha or word.is_digit) and not word.is_stop:
                     ents.append(word.lower_)
@@ -93,7 +98,9 @@ def clean_sent(doc, tag="", relevant_entities=["ORG", "PERSON"]):
 def get_clean_sentence_form_raw_text(raw_text, nlp, tag="", exclude_strings=[]):
     for exclude in exclude_strings:
         raw_text = raw_text.replace(exclude, "")
+    logger.info(f"Processed exclude_strings")
     doc = nlp(raw_text)
+    logger.info(f"Ran spacy pipeline.")
     return clean_sent(doc, tag)
 
 
