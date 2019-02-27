@@ -108,11 +108,16 @@ def get_tag_and_text(df):
     for title, pub, date, raw_text in zip(
         df.title, df.publication, df.date, df.content
     ):
-        tag = title + " " + pub + " " + date
-        tag = tag.strip().replace(" ", "_").replace("-", "_").lower()
-        yield tag, raw_text
+        try:
+            tag = f"{title} {pub} {date}"
+            tag = tag.strip().replace(" ", "_").replace("-", "_").lower()
+            yield tag, raw_text
+        except TypeError as e:
+            logger.error(f"Found an error: {title} {pub}")
+            logger.exception(e)
 
 
+@logger.catch
 def train(model_path="models/", save_temp_after=100_000):
     nlp = spacy.load("en")
     logger.info(f"Start to train function")
