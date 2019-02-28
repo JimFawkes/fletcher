@@ -12,5 +12,6 @@ nltk
 seaborn
 tqdm
 python-dotenv
+Cython
 
 

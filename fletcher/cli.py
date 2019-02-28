@@ -39,6 +39,21 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument("--train_pv", action="store_true", help="Train Paragraph Vectors.")
+
+parser.add_argument(
+    "--train_model", action="store_true", help="Train Paragraph Vectors."
+)
+
+parser.add_argument(
+    "--train_from_pickle",
+    action="store_true",
+    help="Train Paragraph Vectors from a pickled docs file.",
+)
+parser.add_argument(
+    "--run_preprocessing",
+    action="store_true",
+    help="Run Preprocessing on all news articles.",
+)
 #
 # parser.add_argument(
 #     "--create_tables",
@@ -63,6 +78,18 @@ def train_paragraph_vectors():
     return train.train()
 
 
+def train_model():
+    return train.train_model()
+
+
+def run_preprocessing():
+    return train.run_preprocessing()
+
+
+def train_from_pickle():
+    return train.train_from_pickle()
+
+
 def main():
     args = parser.parse_args()
     # logger.debug(f"Starting Pipline")
@@ -73,6 +100,23 @@ def main():
         logger.info(f"Train Paragraph Vectors")
         model = train_paragraph_vectors()
         sys.exit(0)
+
+    if args.train_model:
+        logger.info("Train model")
+        model = train_model()
+        sys.exit(0)
+
+    if args.run_preprocessing:
+        logger.info("Run Preprocessing")
+        docs = run_preprocessing()
+        sys.exit(0)
+
+    if args.train_from_pickle:
+        logger.info("Train Paragraph Vectors from pickled docs file.")
+        model = train_from_pickle()
+        sys.exit(0)
+
+    sys.exit(1)
 
 
 if __name__ == "__main__":
